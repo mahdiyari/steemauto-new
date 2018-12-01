@@ -1,0 +1,27 @@
+.card {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+@media (min-width: 768px) {
+  .user-details .table {
+    width: 33.33333333% !important;
+    border-left: 1px solid #ddd;
+  }
+  .user-details .first-table {
+    border-left: 0;
+  }
+  .user-details .first-table,
+  .user-details .second-table {
+    float: left;
+  }
+}
+@media (max-width: 768px) {
+  .user-details .table {
+    border-top: 1px solid #ddd;
+  }
+  .user-details .first-table {
+    border-top: 0;
+  }
+}
