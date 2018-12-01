@@ -1,0 +1,35 @@
+<div class="col-sm-4">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Balance</h3></div>
+    <table class="table">
+      <tr>
+        <td>STEEM:</td>
+        <td>{{ dash.exportUserDetails().balance || 0 | number }} STEEM</td>
+      </tr>
+      <tr>
+        <td>SBD:</td>
+        <td>{{ dash.exportUserDetails().sbd_balance || 0 | number }} SBD</td>
+      </tr>
+      <tr>
+        <td>Steem power (SP):</td>
+        <td>{{ dash.exportUserDetails().actual_sp || 0 | number }} STEEM</td>
+      </tr>
+      <tr>
+        <td>Received SP:</td>
+        <td>{{ dash.exportUserDetails().received_sp || 0 | number }} STEEM</td>
+      </tr>
+      <tr>
+        <td>Delegated SP:</td>
+        <td>{{ dash.exportUserDetails().delegated_sp || 0 | number }} STEEM</td>
+      </tr>
+      <tr>
+        <td>Total SP:</td>
+        <td>{{ dash.exportUserDetails().total_sp || 0 | number }} STEEM</td>
+      </tr>
+      <tr>
+        <td>Effective SP:</td>
+        <td>{{ dash.exportUserDetails().effective_sp || 0 | number }} STEEM</td>
+      </tr>
+    </table>
+  </div>
+</div>
