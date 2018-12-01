@@ -1,0 +1,167 @@
+<!--
+  This panel is used in the user dashboard to display mana and rc with limitations
+-->
+<div class="col-sm-4">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Limitations</h3></div>
+
+    <!-- Help text -->
+    <div class="panel-body">
+      You can control your Mana and RC by configuring these limitations.
+      Steemauto will stop using your account when one of these limiations
+      reached. <br />
+      Default value is 70%.
+    </div>
+
+    <!-- Mana bar -->
+    <table class="table" style="border-bottom: 1px solid #ddd;">
+      <tr>
+        <td>
+          Current Voting Mana:
+          <ng-container
+            *ngTemplateOutlet="
+              manaBars;
+              context: {
+                mana: votingMana,
+                class: 'info'
+              }
+            "
+          ></ng-container>
+        </td>
+      </tr>
+
+      <!-- Resource Credits -->
+      <tr>
+        <td>
+          Current Resource Credits:
+          <ng-container
+            *ngTemplateOutlet="
+              manaBars;
+              context: {
+                mana: rcMana,
+                class: 'success'
+              }
+            "
+          ></ng-container>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Mana limitation start -->
+    <table class="table">
+      <tr>
+        <td>Mana limitation:</td>
+        <td *ngIf="displayMana">
+          {{ limits().votingLimit || 100 }}%
+          <i
+            class="glyphicon glyphicon-edit"
+            id="edit-icon"
+            (click)="toggleInput('mana')"
+          ></i>
+        </td>
+        <!-- Input mana limitation -->
+        <td *ngIf="!displayMana" id="mana-input-td">
+          <div class="input-group">
+            <input
+              class="form-control input-sm"
+              type="number"
+              min="0.01"
+              max="100"
+              step="0.01"
+              id="mana-limit-input"
+              value="{{ limits().votingLimit }}"
+              placeholder="70"
+            />
+            <span class="input-group-btn">
+              <button
+                class="btn btn-default btn-sm"
+                type="button"
+                (click)="setManaLimit()"
+              >
+                <i class="glyphicon glyphicon-ok"></i>
+              </button>
+              <button
+                class="btn btn-default btn-sm"
+                type="button"
+                (click)="toggleInput('mana')"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </span>
+          </div>
+        </td>
+      </tr>
+
+      <!-- RC limitation start -->
+      <tr>
+        <td>RC limitation:</td>
+        <td *ngIf="displayRC">
+          {{ limits().rcLimit || 100 }}%
+          <i
+            class="glyphicon glyphicon-edit"
+            id="edit-icon"
+            (click)="toggleInput('rc')"
+          ></i>
+        </td>
+        <!-- Input rc limitation -->
+        <td *ngIf="!displayRC" id="rc-input-td">
+          <div class="input-group">
+            <input
+              class="form-control input-sm"
+              type="number"
+              min="0.01"
+              max="100"
+              step="0.01"
+              id="rc-limit-input"
+              value="{{ limits().rcLimit }}"
+              placeholder="70"
+            />
+            <span class="input-group-btn">
+              <button
+                class="btn btn-default btn-sm"
+                type="button"
+                (click)="setRCLimit()"
+              >
+                <i class="glyphicon glyphicon-ok"></i>
+              </button>
+              <button
+                class="btn btn-default btn-sm"
+                type="button"
+                (click)="toggleInput('rc')"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </span>
+          </div>
+        </td>
+      </tr>
+
+      <!-- Voting status -->
+      <tr>
+        <td>Voting status:</td>
+        <td [style.color]="votingStatus().color">
+          {{ votingStatus().text }}
+          <i class="glyphicon glyphicon-{{ votingStatus().icon }}"></i>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- We can use this template to create progress bars -->
+<ng-template #manaBars let-mana="mana" let-class="class">
+  <div
+    id=""
+    class="progress-bar progress-bar-{{ class }} progress-bar-striped"
+    role="progressbar"
+    [attr.aria-valuenow]="mana || 100"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    style="border-radius: 4px; width: 100%;"
+    [ngStyle]="{
+      width: mana || 100 + '%'
+    }"
+  >
+    {{ mana || 100 }}%
+  </div>
+</ng-template>
