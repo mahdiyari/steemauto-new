@@ -1,0 +1,17 @@
+.footer {
+  background-color: #202020;
+  color: #ffffff;
+  padding: 10px 85px;
+  min-height: 50px;
+}
+.footer span {
+  padding-bottom: 8px;
+}
+.footer a {
+  color: #ffffff;
+}
+@media (max-width: 726px){
+  .footer {
+    padding: 10px 20px;
+  }
+}
