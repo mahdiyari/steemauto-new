@@ -1,0 +1,15 @@
+@media (min-width: 726px){
+	.jum-container{
+		padding: 0 70px 0 70px !important;
+    }
+}
+.icons {
+  font-size: 35px;
+}
+.media-heading {
+  border-bottom: 1px solid #000000;
+  padding-bottom: 8px;
+}
+.media {
+  padding-bottom: 10px;
+}
