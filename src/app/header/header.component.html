@@ -1,0 +1,72 @@
+<!-- Navigation -->
+<nav id="top-nav" class="navbar navbar-inverse navbar-fixed-top" data-offset-top="100">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" routerLink="/">
+        <img style="height:45px;" src="{{ navLogo }}">
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <a routerLink="/">
+          <i class="glyphicon glyphicon-home"></i> Home
+        </a>
+      </li>
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <a routerLink="/about">
+          <i class="glyphicon glyphicon-info-sign"></i> About
+        </a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right" id="profile_div" style="float:right !important;">
+      <li id="user_profile" *ngIf="!auth.isAuth">
+        <a routerLink="" onclick="$('#loginmodal').modal('show');">Login</a>
+      </li>
+      <li id="" *ngIf="auth.isAuth">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          @{{ auth.username }}
+        </a>
+        <ul class="dropdown-menu">
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a routerLink="/dashboard">Dashboard</a>
+          </li>
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a routerLink="/@">My Blog</a>
+          </li>
+          <li>
+            <a (click)="auth.logout()">Logout</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div style="margin-bottom: 70px;"></div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginmodal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Login confirmation</h4>
+      </div>
+      <div class="modal-body">
+        <!-- modal body -->
+        <p>You need a Steem account to login. <br>
+          We will redirect you, to the Steemconnect to confirm your account information.<br>
+          Steemconnect is a trusted third party which is developed to keep your account secure while using other apps.
+          <br>
+          (Your login is valid for 7 days on this browser)
+        </p>
+        <button class="btn btn-primary btn-md" (click)="auth.login()">Click to login</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End login modal -->
+
+<app-header-sidebar *ngIf="auth.isAuth"></app-header-sidebar>

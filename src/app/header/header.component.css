@@ -1,0 +1,125 @@
+/* Header Start */
+@media (min-width: 120px) {
+  .navbar-expand-sm .navbar-collapse {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-preferred-size: auto !important;
+    flex-basis: auto !important;
+  }
+  .navbar-expand-sm .navbar-nav {
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  .navbar-expand-sm .navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}
+.dropdown-menu > li > a {
+  color: #333;
+}
+.navbar-brand {
+  margin: 0px;
+  padding: 3px;
+}
+.profile_image {
+  width: 40px;
+  background-color: white;
+}
+#user_profile {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#head_img_a {
+  padding: 0;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  #head_img_a {
+    padding: 5px;
+    margin: 0;
+  }
+  nav {
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 5px;
+  }
+}
+.navbar-header,
+.navbar-nav > li {
+  float: left !important;
+}
+
+.navbar-nav {
+  float: left !important;
+  margin-right: 0px !important;
+  margin-left: 15px !important;
+}
+
+.navbar {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  transition: 0.5s;
+}
+.head_user_img {
+  width: 40px;
+  margin: auto !important;
+  padding: auto !important;
+}
+
+/* Loader */
+.loader {
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid #3498db;
+  width: 25px;
+  height: 25px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 768px) {
+  .dropdown-menu {
+    margin-left: -100px;
+    position: absolute !important;
+    background-color: #fff !important;
+    -webkit-background-clip: padding-box !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ccc !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 4px !important;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175) !important;
+  }
+  .dropdown-menu > li > a:hover {
+    color: #262626 !important;
+    text-decoration: none !important;
+    background-color: #f5f5f5 !important;
+  }
+}
+/* Header END */
