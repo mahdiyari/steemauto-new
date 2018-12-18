@@ -1,0 +1,49 @@
+<div class="col-sm-4">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <i class="panel-icon glyphicon glyphicon-list-alt"></i>
+      <h3 class="panel-title">Your voting details</h3>
+    </div>
+    <table class="table">
+      <tr>
+        <td>Full vote value<sup>[1]</sup>:</td>
+        <td>
+          ${{ steem.getVoteValue(dash.exportUserDetails().effective_sp) }}
+        </td>
+      </tr>
+      <tr>
+        <td>Current vote value:<sup>[2]</sup>:</td>
+        <td>
+          ${{
+            steem.getVoteValue(
+              dash.exportUserDetails().effective_sp *
+                (dash.exportUserDetails().voting_mana / 100)
+            )
+          }}
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum possible upvote<sup>[3]</sup>:</td>
+        <td>
+          {{
+            dash.exportUserDetails().effective_sp >= 3
+              ? (
+                  (3 / (dash.exportUserDetails().effective_sp || 3)) *
+                  100
+                ).toFixed(2) + '%'
+              : 'None. Your SP is too low!'
+          }}
+        </td>
+      </tr>
+    </table>
+
+    <div class="panel-footer">
+      <sub>
+        [1]: When your voting mana and weight are 100% <br />
+        [2]: Calculated by your current voting mana and 100% weight <br />
+        [3]: Your upvotes will not be broadcasted by steemauto if you try to
+        upvote with weight which is lower than this minimum
+      </sub>
+    </div>
+  </div>
+</div>
