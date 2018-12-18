@@ -1,6 +1,9 @@
 <div class="col-sm-4">
   <div class="panel panel-primary">
-    <div class="panel-heading"><h3 class="panel-title">Balance</h3></div>
+    <div class="panel-heading">
+      <i class="panel-icon glyphicon glyphicon-credit-card"></i>
+      <h3 class="panel-title">Your steem balance</h3>
+    </div>
     <table class="table">
       <tr>
         <td>STEEM:</td>
@@ -27,9 +30,15 @@
         <td>{{ dash.exportUserDetails().total_sp || 0 | number }} STEEM</td>
       </tr>
       <tr>
-        <td>Effective SP:</td>
+        <td>Effective SP<sup>[1]</sup>:</td>
         <td>{{ dash.exportUserDetails().effective_sp || 0 | number }} STEEM</td>
       </tr>
     </table>
+
+    <div class="panel-footer">
+      <sub>
+        [1]: Active powerdowns will reduce your effective SP (vote value)
+      </sub>
+    </div>
   </div>
 </div>
