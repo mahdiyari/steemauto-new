@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="col col-md-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <i class="panel-icon glyphicon glyphicon-list"></i>
+        <h3 class="panel-title">Top curation trails</h3>
+      </div>
+      <div class="panel-body">
+        You can explore list of the popular curation trails or follow a curation
+        trail by the trail name using then given text box. <br /><br />
+
+        <!-- Search trail panel -->
+        <app-seaarch-trail></app-seaarch-trail>
+
+      </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Followers</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let trail of _t.getPages(
+                topTrails,
+                topTrailsPage.page,
+                _t.tablePageSize
+              );
+              let i = index
+            "
+            [attr.data-index]="i"
+          >
+            <td>{{ i + 1 + (topTrailsPage.page - 1) * _t.tablePageSize }}</td>
+            <td>{{ trail.user }}</td>
+            <td>{{ trail.followers }}</td>
+            <td>{{ trail.description.substr(0, 100) }}</td>
+            <td>delete, config</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer pages-btns">
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="_t.changePage(-1, topTrails, topTrailsPage)"
+          [attr.disabled]="topTrailsPage.page <= 1 ? 'disabled' : null"
+        >
+          <i class="glyphicon glyphicon-arrow-left"></i> Back
+        </button>
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="_t.changePage(1, topTrails, topTrailsPage)"
+          [attr.disabled]="
+            _t.disableNxtBtn(topTrails, topTrailsPage) ? 'disabled' : null
+          "
+        >
+          Next <i class="glyphicon glyphicon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
