@@ -25,6 +25,7 @@
     "rxjs": "^6.0.0",
     "sanitize-html": "^1.19.1",
     "sc2-sdk": "^2.0.0",
+    "time-ago-pipe": "^1.3.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
