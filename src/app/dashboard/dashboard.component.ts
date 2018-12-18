@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
     private _http: HttpClient,
     public auth: AuthService,
     public steem: SteemService
-  ) { }
+  ) {}
 
   public exportUserDetails() {
     const ud = this.auth.userDetails
@@ -31,14 +31,12 @@ export class DashboardComponent implements OnInit {
       delegated_sp: this.spObject ? this.spObject.delegated_sp : null,
       total_sp: this.spObject ? this.spObject.total_sp : null,
       effective_sp: this.spObject ? this.spObject.effective_sp : null,
-      voting_mana: ud ? this.steem.getMana(ud) : null,
+      voting_mana: parseInt(ud ? this.steem.getMana(ud) : null, 10),
       rc_mana: ud ? this.steem.getRc(ud) : null
     })
   }
   private getSp(ud) {
     this.spObject = this.steem.SteempowerFormatter(ud)
   }
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

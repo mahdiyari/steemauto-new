@@ -1,33 +1,12 @@
 <div class="container">
-  <!-- Announcement pannel -->
-  <div class="col-sm-4">
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">Announcements</h3>
-      </div>
-      <div class="panel-body">Panel content</div>
-    </div>
-  </div>
+  <!-- Price panel -->
+  <app-price></app-price>
 
   <!-- Stats panel -->
   <app-stats></app-stats>
 
-  <!-- Information panel -->
-  <div class="col-sm-4">
-    <div class="panel panel-warning">
-      <div class="panel-heading"><h3 class="panel-title">Information</h3></div>
-      <table class="table">
-        <tr>
-          <td>STEEM price:</td>
-          <td>$0.95</td>
-        </tr>
-        <tr>
-          <td>SBD price:</td>
-          <td>$1.05</td>
-        </tr>
-      </table>
-    </div>
-  </div>
+  <!-- Announcement pannel -->
+  <app-announcement></app-announcement>
 </div>
 
 <div class="container">
@@ -41,69 +20,8 @@
   ></app-limits>
 
   <!-- Voting details panel -->
-  <div class="col-sm-4">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title">Voting details</h3>
-      </div>
-      <div class="panel-body">Some information about your upvotes.</div>
-      <table class="table">
-        <tr>
-          <td>100% upvote value:</td>
-          <td>$0.5052</td>
-        </tr>
-        <tr>
-          <td>Minimum possible upvote:</td>
-          <td>%0.2</td>
-        </tr>
-      </table>
-    </div>
-  </div>
+  <app-voting-detail></app-voting-detail>
 </div>
 
-<div class="container">
-  <!-- Successfull upvotes panel -->
-  <div class="col-sm-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Successful upvotes</h3>
-      </div>
-      <table class="table">
-        <tr>
-          <th>#</th>
-          <th>permlink</th>
-          <th>time</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>@mahdiyari/test-post-holly</td>
-          <td>2018-12-18T20:54</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="col-sm-12">
-    <div class="panel panel-danger">
-      <div class="panel-heading">
-        <h3 class="panel-title">Failed upvotes</h3>
-      </div>
-      <table class="table">
-        <tr>
-          <th>#</th>
-          <th>permlink</th>
-          <th>error</th>
-          <th>time</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>@mahdiyari/another-test-post-holly</td>
-          <td>low mana</td>
-          <td>2018-12-21T15:32</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
+<!-- vote history panels -->
+<app-vote-history></app-vote-history>
