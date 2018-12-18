@@ -1,0 +1,130 @@
+<div class="container">
+  <!-- Successfull upvotes panel -->
+  <div class="col-sm-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <i class="panel-icon glyphicon glyphicon-list"></i>
+          Last 50 successful upvotes<sup>*</sup> (7days)
+        </h3>
+      </div>
+      <div class="panel-body" *ngIf="!successfulVotes.length">No upvotes</div>
+      <table *ngIf="successfulVotes.length" class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>permlink</th>
+            <th>time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let vote of getPages(
+                successfulVotes,
+                successVotesPage.page,
+                tablePageSize
+              );
+              let i = index
+            "
+            [attr.data-index]="i"
+          >
+            <td>
+              <b>{{ i + 1 + (successVotesPage.page - 1) * tablePageSize }}</b>
+            </td>
+            <td>
+              <a
+                href="{{ 'https://steemit.com/@' + vote.author + '/' + vote.permlink }}"
+                target="_blank"
+              >
+                {{ '@' + vote.author + '/' + vote.permlink }}
+                <i class="glyphicon glyphicon-new-window"></i>
+              </a>
+            </td>
+            <td>{{ vote.timestamp * 1000 | timeAgo }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer pages-btns" *ngIf="successfulVotes.length">
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="changePage(-1, successfulVotes, successVotesPage)"
+          [attr.disabled]="successVotesPage.page <= 1 ? 'disabled' : null"
+        >
+          <i class="glyphicon glyphicon-arrow-left"></i> Back
+        </button>
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="changePage(1, successfulVotes, successVotesPage)"
+          [attr.disabled]="disableNxtBtn(successfulVotes, successVotesPage) ? 'disabled' : null"
+        >
+          Next <i class="glyphicon glyphicon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="col-sm-12">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <i class="panel-icon glyphicon glyphicon-list"></i>
+        <h3 class="panel-title">Last 50 failed upvotes<sup>*</sup> (7days)</h3>
+      </div>
+      <div class="panel-body" *ngIf="!failedVotes.length">No upvotes</div>
+      <table class="table table-striped" *ngIf="failedVotes.length">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>permlink</th>
+            <th>error</th>
+            <th>time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let vote of getPages(failedVotes, failedVotesPage.page, tablePageSize);
+              let i = index
+            "
+            [attr.data-index]="i"
+          >
+            <td>
+              <b>{{ i + 1 + (failedVotesPage.page - 1) * tablePageSize }}</b>
+            </td>
+            <td>
+              <a
+                href="{{ 'https://steemit.com/@' + vote.author + '/' + vote.permlink }}"
+                target="_blank"
+              >
+                {{ '@' + vote.author + '/' + vote.permlink }}
+                <i class="glyphicon glyphicon-new-window"></i>
+              </a>
+            </td>
+            <td>{{ vote.error }}</td>
+            <td>{{ vote.timestamp * 1000 | timeAgo }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer pages-btns" *ngIf="failedVotes.length">
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="changePage(-1, failedVotes, failedVotesPage)"
+          [attr.disabled]="failedVotesPage.page <= 1 ? 'disabled' : null"
+        >
+          <i class="glyphicon glyphicon-arrow-left"></i> Back
+        </button>
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="changePage(1, failedVotes, failedVotesPage)"
+          [attr.disabled]="disableNxtBtn(failedVotes, failedVotesPage) ? 'disabled' : null"
+        >
+          Next <i class="glyphicon glyphicon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  *: If you upvote through other steem front-ends like steemit, your upvotes
+  will not be shown here.
+</div>

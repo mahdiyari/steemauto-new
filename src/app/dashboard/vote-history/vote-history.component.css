@@ -1,0 +1,7 @@
+.pages-btns {
+  text-align: center;
+  border-top: 1px solid #dddddd;
+}
+.pages-btns .btn {
+  margin: 0px 5px;
+}
