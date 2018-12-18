@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import config from '../../app.config'
 
 @Component({
   selector: 'app-stats',
@@ -15,7 +16,7 @@ export class StatsComponent implements OnInit {
   }
   public getStats() {
     this._http.post(
-      'http://127.0.0.1:3001/api/v1.1/dashboard/stats',
+      config.api.stats,
       {}
     )
     .toPromise()

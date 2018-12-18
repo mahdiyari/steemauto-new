@@ -1,12 +1,22 @@
 <div class="col-sm-4">
   <div class="panel panel-info">
     <div class="panel-heading">
+      <i class="panel-icon glyphicon glyphicon-stats"></i>
       <h3 class="panel-title">Steemauto stats</h3>
     </div>
-    <div class="panel-body">
-      Total users: {{ stats['totalUsers'] }} <br />
-      Daily upvotes: {{ stats['dailyVotes'] }} <br />
-      Daily posts: {{ stats['dailyPosts'] }}
-    </div>
+    <table class="table">
+      <tr>
+        <td>Total users:</td>
+        <td>{{ stats['totalUsers'] }}</td>
+      </tr>
+      <tr>
+        <td>Daily upvotes:</td>
+        <td>{{ stats['dailyVotes'] }}</td>
+      </tr>
+      <tr>
+        <td>Daily posts:</td>
+        <td>{{ stats['dailyPosts'] }}</td>
+      </tr>
+    </table>
   </div>
 </div>
