@@ -9,6 +9,9 @@ export class SteemService {
   private tvs
   private tvfs
   private callGlobal = 0
+  private callRewardFund = 0
+  public rbPrc
+  public steemMedianPrice
   public callRc = 0
   public rcnow
   constructor(private _http: HttpClient) {}
@@ -24,7 +27,9 @@ export class SteemService {
   }
 
   public ReputaionFormatter(_reputation) {
-    if (_reputation == null) { return _reputation }
+    if (_reputation == null) {
+      return _reputation
+    }
     _reputation = parseInt(_reputation, 10)
     let rep = String(_reputation)
     const neg = rep.charAt(0) === '-'
@@ -34,7 +39,9 @@ export class SteemService {
     const log = Math.log(leadingDigits) / Math.log(10)
     const n = str.length - 1
     let out = n + (log - Math.trunc(log))
-    if (isNaN(out)) { out = 0 }
+    if (isNaN(out)) {
+      out = 0
+    }
     out = Math.max(out - 9, 0)
     out = (neg ? -1 : 1) * out
     out = out * 9 + 25
@@ -54,27 +61,33 @@ export class SteemService {
     if (!account || !this.tvfs || !this.tvs) {
       return null
     }
-    const delegated = parseInt(account.delegated_vesting_shares.replace('VESTS', ''), 10)
-    const received = parseInt(account.received_vesting_shares.replace('VESTS', ''), 10)
+    const delegated = parseInt(
+      account.delegated_vesting_shares.replace('VESTS', ''),
+      10
+    )
+    const received = parseInt(
+      account.received_vesting_shares.replace('VESTS', ''),
+      10
+    )
     const vesting = parseInt(account.vesting_shares.replace('VESTS', ''), 10)
     const totalvest = vesting + received - delegated
-    const spv = (this.tvfs / this.tvs)
+    const spv = this.tvfs / this.tvs
     const total_sp = (totalvest * spv).toFixed(3)
     const actual_sp = (vesting * spv).toFixed(3)
     const delegated_sp = (delegated * spv).toFixed(3)
     const received_sp = (received * spv).toFixed(3)
     const withdrawRate = Math.min(
       parseInt(account.vesting_withdraw_rate.replace('VESTS', ''), 10),
-      ((account.to_withdraw - account.withdrawn) / 1000000)
+      (account.to_withdraw - account.withdrawn) / 1000000
     )
     const effective_sp = (totalvest - withdrawRate) * spv
-    return ({
+    return {
       actual_sp,
       total_sp,
       delegated_sp,
       received_sp,
       effective_sp
-    })
+    }
   }
 
   public vestToSteem(vest) {
@@ -85,15 +98,12 @@ export class SteemService {
     if (!this.tvfs || !this.tvs) {
       return null
     }
-    const spv = (this.tvfs / this.tvs)
+    const spv = this.tvfs / this.tvs
     return (vest * spv).toFixed(3)
   }
 
   private getGlobals() {
-    this.call(
-      'condenser_api.get_dynamic_global_properties',
-      []
-    ).then(res => {
+    this.call('condenser_api.get_dynamic_global_properties', []).then(res => {
       this.tvfs = res['result'].total_vesting_fund_steem.replace('STEEM', '')
       this.tvs = res['result'].total_vesting_shares.replace('VESTS', '')
     })
@@ -102,21 +112,24 @@ export class SteemService {
   public getMana(account) {
     const withdrawRate = Math.min(
       parseInt(account.vesting_withdraw_rate.replace('VESTS', ''), 10),
-      ((account.to_withdraw - account.withdrawn) / 1000000)
+      (account.to_withdraw - account.withdrawn) / 1000000
     )
-    const delegated = parseInt(account.delegated_vesting_shares.replace('VESTS', ''), 10)
-    const received = parseInt(account.received_vesting_shares.replace('VESTS', ''), 10)
+    const delegated = parseInt(
+      account.delegated_vesting_shares.replace('VESTS', ''),
+      10
+    )
+    const received = parseInt(
+      account.received_vesting_shares.replace('VESTS', ''),
+      10
+    )
     const vesting = parseInt(account.vesting_shares.replace('VESTS', ''), 10)
     const totalvest = vesting + received - delegated
     const maxMana = Number((totalvest - withdrawRate) * Math.pow(10, 6))
-    const powernow = this.calculateManabar(
-      maxMana,
-      account.voting_manabar
-    )
+    const powernow = this.calculateManabar(maxMana, account.voting_manabar)
     return powernow
   }
 
-  public getRc (account) {
+  public getRc(account) {
     if (!this.callRc) {
       this.calcRc(account)
       this.callRc = 1
@@ -125,23 +138,22 @@ export class SteemService {
   }
 
   private calcRc(account) {
-    this.call(
-      'rc_api.find_rc_accounts',
-      {accounts: [account.name]}
-    ).then(result => {
-      const res = result['result']
-      const rcnow = this.calculateManabar(
-        res.rc_accounts[0].max_rc,
-        res.rc_accounts[0].rc_manabar
-      )
-      this.rcnow = rcnow
-    })
+    this.call('rc_api.find_rc_accounts', { accounts: [account.name] }).then(
+      result => {
+        const res = result['result']
+        const rcnow = this.calculateManabar(
+          res.rc_accounts[0].max_rc,
+          res.rc_accounts[0].rc_manabar
+        )
+        this.rcnow = rcnow
+      }
+    )
   }
 
   private calculateManabar(max_mana, { last_update_time, current_mana }) {
     const delta = Date.now() / 1000 - last_update_time
-    const currentMana = Number(current_mana) + (delta * max_mana / 432000)
-    let percentage = Math.round(currentMana / max_mana * 10000)
+    const currentMana = Number(current_mana) + (delta * max_mana) / 432000
+    let percentage = Math.round((currentMana / max_mana) * 10000)
     if (!isFinite(percentage)) {
       percentage = 0
     }
@@ -154,4 +166,57 @@ export class SteemService {
     return powernow
   }
 
+  public getVoteValue(sp) {
+    if (!this.callGlobal) {
+      this.getGlobals()
+    }
+    if (!this.callRewardFund) {
+      this.getRewardFund()
+    }
+    this.callGlobal = 1
+    this.callRewardFund = 1
+    if (
+      isNaN(sp) ||
+      !this.tvfs ||
+      !this.tvs ||
+      !this.steemMedianPrice ||
+      !this.rbPrc
+    ) {
+      return null
+    }
+    const spv = this.tvfs / this.tvs
+    const r = sp / spv
+    const p = (10000 + 49) / 50
+    return (r * p * 100 * this.rbPrc * this.steemMedianPrice).toFixed(4)
+  }
+
+  private getRewardFund() {
+    this.call('condenser_api.get_reward_fund', ['post']).then(res => {
+      res = res['result']
+      const n = res['reward_balance'],
+        r = res['recent_claims'],
+        i = n.replace(' STEEM', '') / r
+      this.rbPrc = i
+    })
+    this.call('condenser_api.get_current_median_history_price', []).then(
+      res => {
+        res = res['result']
+        this.steemMedianPrice =
+          res['base'].replace(' SBD', '') / res['quote'].replace(' STEEM', '')
+      }
+    )
+  }
+
+  public async validateAccount(user) {
+    let result = await this.call(
+      'condenser_api.get_accounts',
+      [[user]]
+    )
+    result = result ? result['result'] : null
+    if (result && result[0] && result[0].name === user) {
+      return true
+    } else {
+      return false
+    }
+  }
 }
