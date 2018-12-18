@@ -1,0 +1,56 @@
+<div class="col col-sm-6 search-box">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <label for="trail-name">Curation trail:</label>
+      <div class="input-group">
+        <input
+          type="text"
+          name="trail-name"
+          class="form-control trail-name"
+          placeholder="steemauto"
+          (input)="trailNameChange($event.target.value)"
+        />
+        <span class="input-group-btn">
+          <button
+            class="btn btn-default search-btn"
+            (click)="searchTrail()"
+            [attr.disabled]="!trailName ? 'disabled' : null"
+          >
+            Search
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col col-sm-6">
+  <img
+    src="/assets/img/loading.gif"
+    class="loading center-block"
+    alt="loading"
+    *ngIf="startSearch"
+  />
+  <div class="panel panel-primary search-result" *ngIf="searchResult.done">
+    <div class="panel-body" *ngIf="!searchResult.valid">
+      Wrong username!
+    </div>
+    <table class="table" *ngIf="searchResult.valid">
+      <tr>
+        <td><b>Name:</b></td>
+        <td>{{ searchResult.name }}</td>
+      </tr>
+      <tr>
+        <td><b>Description:</b></td>
+        <td>{{ searchResult.description }}</td>
+      </tr>
+      <tr>
+        <td><b>Followers:</b></td>
+        <td>{{ searchResult.followers }}</td>
+      </tr>
+      <tr>
+        <td><b>Action:</b></td>
+        <td>Follow</td>
+      </tr>
+    </table>
+  </div>
+</div>

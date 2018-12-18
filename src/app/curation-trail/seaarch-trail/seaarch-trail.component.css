@@ -1,0 +1,10 @@
+.loading {
+  margin-top: 25px;
+}
+.search-result i {
+  cursor: pointer;
+  color: darkred;
+}
+.search-box {
+  margin-bottom: 12px;
+}
