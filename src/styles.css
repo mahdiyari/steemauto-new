@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+i.panel-icon {
+  float: right;
+  margin-right:5px;
+}
+
+.pages-btns {
+  text-align: center;
+  border-top: 1px solid #dddddd;
+}
+.pages-btns .btn {
+  margin: 0px 5px;
+}
