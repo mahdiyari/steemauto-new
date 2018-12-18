@@ -1,0 +1,24 @@
+<div class="col-sm-4">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <i class="panel-icon glyphicon glyphicon-pushpin"></i>
+      <h3 class="panel-title">Announcements</h3>
+    </div>
+    <div class="panel-body">
+      <div *ngIf="annLink">
+        <i class="glyphicon glyphicon-pushpin"></i>
+        <a href="{{ annLink }}" target="_blank">
+          <b> {{ annTitle }} </b> <i class="glyphicon glyphicon-new-window"></i>
+        </a>
+        <br />
+        <br />
+      </div>
+      <span *ngIf="!annLink"
+        >Follow @steemauto in steemit to get our future announcements.</span
+      >
+    </div>
+    <div class="panel-footer" *ngIf="annLink">
+      <i class="glyphicon glyphicon-time"></i> {{ annCreated | timeAgo }}
+    </div>
+  </div>
+</div>
