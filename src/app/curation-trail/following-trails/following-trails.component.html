@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="col col-sm-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <i class="panel-icon glyphicon glyphicon-list"></i>
+        <h3 class="panel-title">You are following</h3>
+      </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Followers</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let trail of _t.getPages(
+                followingTrails,
+                followingPage.page,
+                _t.tablePageSize
+              );
+              let i = index
+            "
+            [attr.data-index]="i"
+          >
+            <td>{{ i + 1 + (followingPage.page - 1) * _t.tablePageSize }}</td>
+            <td>{{ trail.trailer }}</td>
+            <td>{{ trail.followers }}</td>
+            <td>delete, config</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer pages-btns">
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="_t.changePage(-1, followingTrails, followingPage)"
+          [attr.disabled]="followingPage.page <= 1 ? 'disabled' : null"
+        >
+          <i class="glyphicon glyphicon-arrow-left"></i> Back
+        </button>
+        <button
+          class="btn btn-primary btn-xs"
+          (click)="_t.changePage(1, followingTrails, followingPage)"
+          [attr.disabled]="
+          _t.disableNxtBtn(followingTrails, followingPage) ? 'disabled' : null
+          "
+        >
+          Next <i class="glyphicon glyphicon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
