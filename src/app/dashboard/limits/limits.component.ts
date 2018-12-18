@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { AuthService } from 'src/app/services/auth.service'
 import { getCookie } from 'src/app/utils/cookies'
+import config from '../../app.config'
 declare var $: any
 
 @Component({
@@ -39,7 +40,7 @@ export class LimitsComponent implements OnInit {
   }
   public getLimits(user) {
     this._http
-      .post('http://127.0.0.1:3001/api/v1.1/dashboard/get_limits', {
+      .post(config.api.get_limits, {
         user
       })
       .toPromise()
@@ -55,7 +56,7 @@ export class LimitsComponent implements OnInit {
     const user = getCookie('username')
     $('btn').attr('disabled')
     this._http
-      .post('http://127.0.0.1:3001/api/v1.1/dashboard/set_limits', {
+      .post(config.api.set_limits, {
         user,
         type: 'mana',
         limit: document.getElementById('mana-limit-input')['value']
@@ -74,7 +75,7 @@ export class LimitsComponent implements OnInit {
     const user = getCookie('username')
     $('btn').attr('disabled')
     this._http
-      .post('http://127.0.0.1:3001/api/v1.1/dashboard/set_limits', {
+      .post(config.api.set_limits, {
         user,
         type: 'rc',
         limit: document.getElementById('rc-limit-input')['value']
