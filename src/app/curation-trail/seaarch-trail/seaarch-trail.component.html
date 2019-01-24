@@ -14,7 +14,9 @@
           <button
             class="btn btn-default search-btn"
             (click)="searchTrail()"
-            [attr.disabled]="!trailName ? 'disabled' : null"
+            [attr.disabled]="
+              !trailName ? 'disabled' : null || startSearch ? 'disabled' : null
+            "
           >
             Search
           </button>
@@ -31,10 +33,11 @@
     *ngIf="startSearch"
   />
   <div class="panel panel-primary search-result" *ngIf="searchResult.done">
-    <div class="panel-body" *ngIf="!searchResult.valid">
-      Wrong username!
+    <div class="panel-body" *ngIf="!searchResult.valid">Wrong username!</div>
+    <div class="panel-body" *ngIf="searchResult.error">
+      {{ searchResult.error }}
     </div>
-    <table class="table" *ngIf="searchResult.valid">
+    <table class="table" *ngIf="searchResult.valid && !searchResult.error">
       <tr>
         <td><b>Name:</b></td>
         <td>{{ searchResult.name }}</td>
@@ -49,7 +52,29 @@
       </tr>
       <tr>
         <td><b>Action:</b></td>
-        <td>Follow</td>
+        <td>
+          <button class="btn btn-default btn-sm">
+            <i class="glyphicon glyphicon-eye-open" title="view"></i>
+          </button>
+          <button
+            class="btn btn-primary btn-follow btn-sm"
+            (click)="_t.follow(searchResult.name)"
+            *ngIf="
+              _t.indexOf(_t.followingTrails, searchResult.name) > -1 ? 0 : 1
+            "
+          >
+            Follow
+          </button>
+          <button
+            class="btn btn-danger btn-unfollow btn-sm"
+            (click)="_t.unfollow(searchResult.name)"
+            *ngIf="
+              _t.indexOf(_t.followingTrails, searchResult.name) > -1 ? 1 : 0
+            "
+          >
+            Unfollow
+          </button>
+        </td>
       </tr>
     </table>
   </div>
