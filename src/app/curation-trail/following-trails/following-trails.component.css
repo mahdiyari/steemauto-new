@@ -1,0 +1,15 @@
+.table .btn {
+  margin-right: 6px;
+}
+.enabled-icon {
+  color: green;
+}
+.disabled-icon {
+  color: red;
+}
+
+.dis-icon,
+.en-icon {
+  padding: 0px 2px;
+  border-radius: 50%;
+}
