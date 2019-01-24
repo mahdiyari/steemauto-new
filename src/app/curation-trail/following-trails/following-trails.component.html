@@ -3,49 +3,143 @@
     <div class="panel panel-success">
       <div class="panel-heading">
         <i class="panel-icon glyphicon glyphicon-list"></i>
+
+        <!-- Panel head title -->
         <h3 class="panel-title">You are following</h3>
       </div>
-      <table class="table table-striped">
+      <div class="panel-body" *ngIf="!_t.followingTrails.length">
+        None.
+      </div>
+      <table class="table table-striped" *ngIf="_t.followingTrails.length">
         <thead>
+
+          <!-- Table headings -->
           <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Followers</th>
+            <th>
+              Name
+
+              <!-- Sort button -->
+              <i
+                class="glyphicon glyphicon-sort-by-alphabet pointer"
+                (click)="sort(_t.followingTrails, 'trailer')"
+              ></i>
+            </th>
+            <th>
+              Followers
+
+              <!-- Sort button -->
+              <i
+                class="glyphicon glyphicon-sort-by-order pointer"
+                (click)="sort(_t.followingTrails, 'followers')"
+              ></i>
+            </th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
+
+          <!-- Table body -->
           <tr
             *ngFor="
               let trail of _t.getPages(
-                followingTrails,
-                followingPage.page,
+                _t.followingTrails,
+                _t.followingPage.page,
                 _t.tablePageSize
               );
               let i = index
             "
             [attr.data-index]="i"
           >
-            <td>{{ i + 1 + (followingPage.page - 1) * _t.tablePageSize }}</td>
-            <td>{{ trail.trailer }}</td>
+            <td>
+              <!-- Display current index of object inside main array +1 -->
+              {{ i + 1 + (_t.followingPage.page - 1) * _t.tablePageSize }}
+            </td>
+            <td>
+              <!-- Curation trail name -->
+              {{ trail.trailer }}
+
+              <!-- Status of trail -->
+              <!-- Enabled icon -->
+              <i
+                class="glyphicon glyphicon-ok-circle enabled-icon"
+                *ngIf="trail.enable"
+                data-toggle="tooltip"
+                title="Enabled"
+              ></i>
+
+              <!-- Disabled icon -->
+              <i
+                class="glyphicon glyphicon-ban-circle disabled-icon"
+                *ngIf="!trail.enable"
+                data-toggle="tooltip"
+                title="Disabled"
+              ></i>
+            </td>
+            <!-- Total followers -->
             <td>{{ trail.followers }}</td>
-            <td>delete, config</td>
+            <td>
+
+              <!-- View button -->
+              <button
+                class="btn btn-default btn-xs"
+                data-toggle="tooltip"
+                title="View"
+                [routerLink]="['@' + trail.trailer]"
+              >
+                <i class="glyphicon glyphicon-eye-open"></i>
+              </button>
+
+              <!-- Disable button -->
+              <button
+                class="btn btn-warning btn-disable btn-xs"
+                data-toggle="tooltip"
+                title="Disable"
+                (click)="_t.disableTrail(trail.trailer)"
+                *ngIf="trail.enable"
+              >
+                <i class="glyphicon glyphicon-ban-circle"></i>
+              </button>
+
+              <!-- Enable button -->
+              <button
+                class="btn btn-success btn-disable btn-xs"
+                data-toggle="tooltip"
+                title="Enable"
+                (click)="_t.enableTrail(trail.trailer)"
+                *ngIf="!trail.enable"
+              >
+                <i class="glyphicon glyphicon-ok"></i>
+              </button>
+
+              <!-- Unfollow button -->
+              <button
+                class="btn btn-danger btn-unfollow btn-xs"
+                data-toggle="tooltip"
+                title="Unfollow"
+                (click)="_t.unfollow(trail.trailer)"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
       <div class="panel-footer pages-btns">
         <button
           class="btn btn-primary btn-xs"
-          (click)="_t.changePage(-1, followingTrails, followingPage)"
-          [attr.disabled]="followingPage.page <= 1 ? 'disabled' : null"
+          (click)="_t.changePage(-1, _t.followingTrails, _t.followingPage)"
+          [attr.disabled]="_t.followingPage.page <= 1 ? 'disabled' : null"
         >
           <i class="glyphicon glyphicon-arrow-left"></i> Back
         </button>
         <button
           class="btn btn-primary btn-xs"
-          (click)="_t.changePage(1, followingTrails, followingPage)"
+          (click)="_t.changePage(1, _t.followingTrails, _t.followingPage)"
           [attr.disabled]="
-          _t.disableNxtBtn(followingTrails, followingPage) ? 'disabled' : null
+            _t.disableNxtBtn(_t.followingTrails, _t.followingPage)
+              ? 'disabled'
+              : null
           "
         >
           Next <i class="glyphicon glyphicon-arrow-right"></i>
