@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http'
 import * as config from '../app.config'
 import { setCookie, getCookie } from '../utils/cookies'
 import { nodeCall } from '../utils/nodeCall'
+import { notifyResult } from '../utils/notify'
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class AuthService {
   public access_token
   public userDetails
   public postingAuthorized
+  public httpOptions = {
+    withCredentials: true,
+    headers: { access_key: localStorage.getItem('access_key') || '' }
+  }
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -37,7 +42,7 @@ export class AuthService {
   }
   public logout() {
     setCookie('username', '', 0)
-    setCookie('access_key', '', 0)
+    localStorage.removeItem('access_key')
     this.isAuth = false
     this._router.navigate(['/'])
   }
@@ -54,7 +59,7 @@ export class AuthService {
 
   // this method will redirect callback from steemconnect to the homepage
   public checkLogin() {
-    if (getCookie('access_key') && getCookie('username')) {
+    if (localStorage.getItem('access_key') && getCookie('username')) {
       this.getLogin()
     }
     this._activatedRoute.queryParams.subscribe(params => {
@@ -70,11 +75,14 @@ export class AuthService {
   public getLogin() {
     if (!this.isAuth) {
       this._http
-        .post(config.api.login_api, {
-          username: this.access_token ? null : getCookie('username'),
-          access_key: this.access_token ? null : getCookie('access_key'),
-          access_token: this.access_token
-        })
+        .post(
+          config.api.login_api,
+          {
+            username: this.access_token ? null : getCookie('username'),
+            access_token: this.access_token
+          },
+          this.httpOptions
+        )
         .toPromise()
         .then((res: any) => {
           if (res && res.id === 1) {
@@ -82,37 +90,62 @@ export class AuthService {
             this.getUserDetails()
             if (res.access_key && res.username) {
               setCookie('username', res.username, 7)
-              setCookie('access_key', res.access_key, 7)
+              localStorage.setItem('access_key', res.access_key)
               this.username = res.username
               this.getUserDetails()
             }
           } else {
-            console.log(res)
+            console.error(res)
           }
         })
-        .catch(err => console.log(err))
+        .catch(err => console.error(err))
     }
   }
 
   // This method will get user details by get_accounts from blockchain
   public getUserDetails() {
+    if (!getCookie('username')) {
+      return
+    }
     nodeCall(config.rpc.https, 'condenser_api.get_accounts', [
       [getCookie('username')]
-    ]).then(([result]) => {
+    ]).then(result => {
+      if (result && result[0]) {
+        result = result[0]
+      } else {
+        notifyResult({
+          id: 0,
+          error: `connection failed to the steem RPC node`
+        })
+      }
       this.userDetails = result
       console.log(result)
       this.checkPostingAuth()
-    })
+    }).catch(e => console.error(e))
   }
 
   public checkPostingAuth() {
-    if (this.userDetails) {
+    if (this.userDetails && this.userDetails.posting) {
       const accounts = this.userDetails.posting.account_auths.map(acc => {
         return acc[0]
       })
       if (accounts.indexOf(config.appName) > -1) {
         this.postingAuthorized = true
       }
+    }
+  }
+
+  /** Send post calls with required auths to the api */
+  public async postCall(api, body) {
+    try {
+      const res = await this._http
+        .post(api, body, this.httpOptions)
+        .toPromise()
+      if (res) {
+        return res
+      }
+    } catch (e) {
+      return null
     }
   }
 
