@@ -11,3 +11,7 @@ i.panel-icon {
 .pages-btns .btn {
   margin: 0px 5px;
 }
+
+.pointer {
+  cursor: pointer;
+}
