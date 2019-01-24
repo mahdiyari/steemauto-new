@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { AuthService } from 'src/app/services/auth.service'
 import { getCookie } from 'src/app/utils/cookies'
 import config from '../../app.config'
+import { notifyResult } from '../../utils/notify'
 declare var $: any
 
 @Component({
@@ -16,6 +17,7 @@ export class LimitsComponent implements OnInit {
   public rcLimit
   public manaLimit
   public getLimitCall
+  public notifyResult = notifyResult
   @Input() rcMana
   @Input() votingMana
   constructor(private _http: HttpClient, public auth: AuthService) {}
@@ -89,18 +91,6 @@ export class LimitsComponent implements OnInit {
           this.notifyResult(res)
         }
       })
-  }
-  public notifyResult(res) {
-    $.notify(
-      {
-        icon: 'glyphicon glyphicon-' + (res['id'] ? 'ok' : 'remove'),
-        message: res['result'] || res['error']
-      },
-      {
-        type: res['id'] ? 'success' : 'danger',
-        timer: 3000
-      }
-    )
   }
   public votingStatus() {
     if (this.rcMana < this.limits().rcLimit || this.votingMana < this.limits().votingLimit) {

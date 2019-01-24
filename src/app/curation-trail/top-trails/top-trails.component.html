@@ -11,9 +11,11 @@
 
         <!-- Search trail panel -->
         <app-seaarch-trail></app-seaarch-trail>
-
       </div>
-      <table class="table table-striped">
+      <div class="panel-body" *ngIf="!topTrails.length">
+        None.
+      </div>
+      <table class="table table-striped" *ngIf="topTrails.length">
         <thead>
           <tr>
             <th>#</th>
@@ -39,7 +41,34 @@
             <td>{{ trail.user }}</td>
             <td>{{ trail.followers }}</td>
             <td>{{ trail.description.substr(0, 100) }}</td>
-            <td>delete, config</td>
+            <td style="min-width: 80px;">
+              <button
+                class="btn btn-default btn-xs"
+                data-toggle="tooltip"
+                title="View"
+                [routerLink]="['@' + trail.user]"
+              >
+                <i class="glyphicon glyphicon-eye-open"></i>
+              </button>
+              <button
+                class="btn btn-primary btn-follow btn-xs"
+                (click)="_t.follow(trail.user)"
+                data-toggle="tooltip"
+                title="Follow"
+                *ngIf="_t.indexOf(_t.followingTrails, trail.user) > -1 ? 0 : 1"
+              >
+                <i class="glyphicon glyphicon-plus"></i>
+              </button>
+              <button
+                class="btn btn-danger btn-unfollow btn-xs"
+                (click)="_t.unfollow(trail.user)"
+                data-toggle="tooltip"
+                title="Unfollow"
+                *ngIf="_t.indexOf(_t.followingTrails, trail.user) > -1 ? 1 : 0"
+              >
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

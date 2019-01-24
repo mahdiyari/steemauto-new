@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+declare var $: any
 
 @Component({
   selector: 'app-footer',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
+  public tooltip() {
+    $(document).ready(function() {
+      $('[title != ""]').tooltip()
+    })
+    setInterval(() => {
+      $(document).ready(function() {
+        $('[title != ""]').tooltip()
+      })
+    }, 5000)
   }
 
+  ngOnInit() {
+    this.tooltip()
+  }
 }

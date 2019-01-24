@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, RouterEvent, NavigationStart } from '@angular/router'
+import { HeaderComponent } from '../header.component'
 
 @Component({
   selector: 'app-header-sidebar',
@@ -7,34 +8,13 @@ import { Router, RouterEvent, NavigationStart } from '@angular/router'
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-
-  constructor(
-    private router: Router
-  ) {
+  constructor(private router: Router, public head: HeaderComponent) {
     router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationStart) {
-        this.toggleSidebar('close')
+        this.head.toggleSidebar('close')
       }
     })
   }
-  public isOpenSidebar
 
-  public toggleSidebar(action?) {
-    if (this.isOpenSidebar || action === 'close') {
-      document.getElementById('sidebar').style.width = '0px'
-      document.getElementById('sidebar-toggle').style.marginLeft = '0px'
-      const element = document.getElementById('sidebar-toggle-icon')
-      element.className = element.className.replace(/\bclose\b/g, 'menu')
-      this.isOpenSidebar = 0
-    } else {
-      document.getElementById('sidebar').style.width = '200px'
-      document.getElementById('sidebar-toggle').style.marginLeft = '200px'
-      const element = document.getElementById('sidebar-toggle-icon')
-      element.className = element.className.replace(/\bmenu\b/g, 'close')
-      this.isOpenSidebar = 1
-    }
-  }
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 }
