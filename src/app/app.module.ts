@@ -17,13 +17,19 @@ import { StatsComponent } from './dashboard/stats/stats.component'
 import { PriceComponent } from './dashboard/price/price.component'
 import { VotingComponent } from './dashboard/voting-detail/voting-detail.component'
 import { TimeAgoPipe } from 'time-ago-pipe'
-import { VoteHistoryComponent } from './dashboard/vote-history/vote-history.component';
-import { AnnouncementComponent } from './dashboard/announcement/announcement.component';
-import { CurationTrailComponent } from './curation-trail/curation-trail.component';
-import { PromotedPostComponent } from './promoted-post/promoted-post.component';
-import { FollowingTrailsComponent } from './curation-trail/following-trails/following-trails.component';
-import { TopTrailsComponent } from './curation-trail/top-trails/top-trails.component';
-import { SeaarchTrailComponent } from './curation-trail/seaarch-trail/seaarch-trail.component'
+import { VoteHistoryComponent } from './dashboard/vote-history/vote-history.component'
+import { AnnouncementComponent } from './dashboard/announcement/announcement.component'
+import { CurationTrailComponent } from './curation-trail/curation-trail.component'
+import { PromotedPostComponent } from './promoted-post/promoted-post.component'
+import { FollowingTrailsComponent } from './curation-trail/following-trails/following-trails.component'
+import { TopTrailsComponent } from './curation-trail/top-trails/top-trails.component'
+import { SearchTrailComponent } from './curation-trail/search-trail/search-trail.component'
+import { TrailPageComponent } from './curation-trail/trail-page/trail-page.component'
+import { FollowButtonComponent } from './curation-trail/buttons/follow-button/follow-button.component'
+import { UnfollowButtonComponent } from './curation-trail/buttons/unfollow-button/unfollow-button.component'
+import { ViewButtonComponent } from './curation-trail/buttons/view-button/view-button.component'
+import { DisableButtonComponent } from './curation-trail/buttons/disable-button/disable-button.component'
+import { EnableButtonComponent } from './curation-trail/buttons/enable-button/enable-button.component'
 
 @NgModule({
   declarations: [
@@ -47,7 +53,13 @@ import { SeaarchTrailComponent } from './curation-trail/seaarch-trail/seaarch-tr
     PromotedPostComponent,
     FollowingTrailsComponent,
     TopTrailsComponent,
-    SeaarchTrailComponent
+    SearchTrailComponent,
+    TrailPageComponent,
+    FollowButtonComponent,
+    UnfollowButtonComponent,
+    ViewButtonComponent,
+    DisableButtonComponent,
+    EnableButtonComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
