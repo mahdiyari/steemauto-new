@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http'
 import config from '../../app.config'
 import { SteemService } from 'src/app/services/steem.service'
 import { CurationTrailComponent } from '../curation-trail.component'
+import { AuthService } from 'src/app/services/auth.service'
 
 @Component({
-  selector: 'app-seaarch-trail',
-  templateUrl: './seaarch-trail.component.html',
-  styleUrls: ['./seaarch-trail.component.css']
+  selector: 'app-search-trail',
+  templateUrl: './search-trail.component.html',
+  styleUrls: ['./search-trail.component.css']
 })
-export class SeaarchTrailComponent implements OnInit {
+export class SearchTrailComponent implements OnInit {
   public searchResult = {
     name: '',
     description: '',
@@ -23,7 +24,8 @@ export class SeaarchTrailComponent implements OnInit {
   constructor(
     public _http: HttpClient,
     public steem: SteemService,
-    public _t: CurationTrailComponent
+    public _t: CurationTrailComponent,
+    private auth: AuthService
   ) {}
   public trailNameChange(n) {
     this.trailName = n
@@ -39,9 +41,8 @@ export class SeaarchTrailComponent implements OnInit {
         this.startSearch = 0
         return
       }
-      this._http
-        .post(config.api.search_trail, { trail: this.trailName })
-        .toPromise()
+      this.auth
+        .postCall(config.api.search_trail, { trail: this.trailName })
         .then(ress => {
           if (ress && ress['id'] === 1 && ress['result']) {
             this.searchResult['name'] = ress['result'].user
