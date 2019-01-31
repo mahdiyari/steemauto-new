@@ -15,3 +15,12 @@ i.panel-icon {
 .pointer {
   cursor: pointer;
 }
+
+img {
+  max-width: 100%;
+}
+
+.btn {
+  margin-left: 3px;
+  margin-right: 3px;
+}
