@@ -14,6 +14,8 @@ export class SteemService {
   public steemMedianPrice
   public callRc = 0
   public rcnow
+  public acHisThreshold = {}
+  public acHis = {}
   constructor(private _http: HttpClient) {}
   public call(method, params) {
     return this._http
@@ -24,6 +26,7 @@ export class SteemService {
         id: 1
       })
       .toPromise()
+      .catch(e => console.error('Error in call():', e))
   }
 
   public ReputaionFormatter(_reputation) {
@@ -50,7 +53,7 @@ export class SteemService {
 
   /**
    * This method will convert vests to the steem
-   * and will return an object of total, delegated, and received vests
+   * and will return an object of actual, effective, total, delegated, and received vests
    * @param account get_accounts received from RPC node
    */
   public SteempowerFormatter(account) {
@@ -103,10 +106,12 @@ export class SteemService {
   }
 
   private getGlobals() {
-    this.call('condenser_api.get_dynamic_global_properties', []).then(res => {
-      this.tvfs = res['result'].total_vesting_fund_steem.replace('STEEM', '')
-      this.tvs = res['result'].total_vesting_shares.replace('VESTS', '')
-    })
+    this.call('condenser_api.get_dynamic_global_properties', [])
+      .then(res => {
+        this.tvfs = res['result'].total_vesting_fund_steem.replace('STEEM', '')
+        this.tvs = res['result'].total_vesting_shares.replace('VESTS', '')
+      })
+      .catch(e => console.error('Error in getGlobals:', e))
   }
 
   public getMana(account) {
@@ -138,16 +143,16 @@ export class SteemService {
   }
 
   private calcRc(account) {
-    this.call('rc_api.find_rc_accounts', { accounts: [account.name] }).then(
-      result => {
+    this.call('rc_api.find_rc_accounts', { accounts: [account.name] })
+      .then(result => {
         const res = result['result']
         const rcnow = this.calculateManabar(
           res.rc_accounts[0].max_rc,
           res.rc_accounts[0].rc_manabar
         )
         this.rcnow = rcnow
-      }
-    )
+      })
+      .catch(e => console.error('Error in rc calculation:', e))
   }
 
   private calculateManabar(max_mana, { last_update_time, current_mana }) {
@@ -191,32 +196,61 @@ export class SteemService {
   }
 
   private getRewardFund() {
-    this.call('condenser_api.get_reward_fund', ['post']).then(res => {
-      res = res['result']
-      const n = res['reward_balance'],
-        r = res['recent_claims'],
-        i = n.replace(' STEEM', '') / r
-      this.rbPrc = i
-    })
-    this.call('condenser_api.get_current_median_history_price', []).then(
-      res => {
+    this.call('condenser_api.get_reward_fund', ['post'])
+      .then(res => {
+        res = res['result']
+        const n = res['reward_balance'],
+          r = res['recent_claims'],
+          i = n.replace(' STEEM', '') / r
+        this.rbPrc = i
+      })
+      .catch(e => console.error('Error in getRewardFund:', e))
+    this.call('condenser_api.get_current_median_history_price', [])
+      .then(res => {
         res = res['result']
         this.steemMedianPrice =
           res['base'].replace(' SBD', '') / res['quote'].replace(' STEEM', '')
-      }
-    )
+      })
+      .catch(e => console.error('Error in getRewardFund:', e))
   }
 
   public async validateAccount(user) {
-    let result = await this.call(
-      'condenser_api.get_accounts',
-      [[user]]
-    )
-    result = result ? result['result'] : null
-    if (result && result[0] && result[0].name === user) {
-      return true
-    } else {
-      return false
+    try {
+      let result = await this.call('condenser_api.get_accounts', [[user]])
+      result = result ? result['result'] : null
+      if (result && result[0] && result[0].name === user) {
+        return true
+      } else {
+        return false
+      }
+    } catch (e) {
+      console.error('Error in validateAccount:', e)
     }
+  }
+
+  public getAccountHistory(user) {
+    if (!this.acHisThreshold[user] || this.acHis[user]) {
+      this.acHisThreshold[user] = true
+      return new Promise((resolve, reject) => {
+        if (this.acHis[user]) {
+          // return cached data
+          // since account_hisotiry_api takes too long to respond
+          resolve(this.acHis[user])
+        } else {
+          this.call('account_history_api.get_account_history', {
+            account: user,
+            start: -1,
+            limit: 10000
+          }).then((res: any) => {
+            // store data in object for chaching purpose
+            this.acHis[user] = res
+            resolve(res)
+          })
+        }
+      })
+    }
+    return new Promise((resolve, reject) => {
+      resolve(1)
+    })
   }
 }
