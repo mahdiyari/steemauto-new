@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import config from '../app.config'
 import { AuthService } from '../services/auth.service'
-import { HttpClient } from '@angular/common/http'
 import { notifyResult } from '../utils/notify'
 import {
   changePage,
@@ -29,7 +28,7 @@ export class CurationTrailComponent implements OnInit {
   public tablePageSize = tablePageSize
   public notifyResult = notifyResult
 
-  constructor(public auth: AuthService, public _http: HttpClient) {
+  constructor(private auth: AuthService) {
     // update list of following trails
     this.getFollowing()
   }
