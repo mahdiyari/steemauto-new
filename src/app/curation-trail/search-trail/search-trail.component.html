@@ -53,27 +53,18 @@
       <tr>
         <td><b>Action:</b></td>
         <td>
-          <button class="btn btn-default btn-sm">
-            <i class="glyphicon glyphicon-eye-open" title="view"></i>
-          </button>
-          <button
-            class="btn btn-primary btn-follow btn-sm"
-            (click)="_t.follow(searchResult.name)"
-            *ngIf="
-              _t.indexOf(_t.followingTrails, searchResult.name) > -1 ? 0 : 1
-            "
-          >
-            Follow
-          </button>
-          <button
-            class="btn btn-danger btn-unfollow btn-sm"
-            (click)="_t.unfollow(searchResult.name)"
-            *ngIf="
-              _t.indexOf(_t.followingTrails, searchResult.name) > -1 ? 1 : 0
-            "
-          >
-            Unfollow
-          </button>
+          <app-trail-view-button
+            [trail]="searchResult.name"
+            [text]="'View'"
+          ></app-trail-view-button>
+          <app-trail-follow-button
+            [trail]="searchResult.name"
+            [text]="'Follow'"
+          ></app-trail-follow-button>
+          <app-trail-unfollow-button
+            [trail]="searchResult.name"
+            [text]="'Unfollow'"
+          ></app-trail-unfollow-button>
         </td>
       </tr>
     </table>

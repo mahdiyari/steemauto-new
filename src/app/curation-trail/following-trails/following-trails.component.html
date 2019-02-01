@@ -7,12 +7,9 @@
         <!-- Panel head title -->
         <h3 class="panel-title">You are following</h3>
       </div>
-      <div class="panel-body" *ngIf="!_t.followingTrails.length">
-        None.
-      </div>
+      <div class="panel-body" *ngIf="!_t.followingTrails.length">None.</div>
       <table class="table table-striped" *ngIf="_t.followingTrails.length">
         <thead>
-
           <!-- Table headings -->
           <tr>
             <th>#</th>
@@ -38,7 +35,6 @@
           </tr>
         </thead>
         <tbody>
-
           <!-- Table body -->
           <tr
             *ngFor="
@@ -79,48 +75,27 @@
             <!-- Total followers -->
             <td>{{ trail.followers }}</td>
             <td>
-
               <!-- View button -->
-              <button
-                class="btn btn-default btn-xs"
-                data-toggle="tooltip"
-                title="View"
-                [routerLink]="['@' + trail.trailer]"
-              >
-                <i class="glyphicon glyphicon-eye-open"></i>
-              </button>
+              <app-trail-view-button
+                [trail]="trail.trailer"
+              ></app-trail-view-button>
 
               <!-- Disable button -->
-              <button
-                class="btn btn-warning btn-disable btn-xs"
-                data-toggle="tooltip"
-                title="Disable"
-                (click)="_t.disableTrail(trail.trailer)"
-                *ngIf="trail.enable"
-              >
-                <i class="glyphicon glyphicon-ban-circle"></i>
-              </button>
+              <app-trail-disable-button
+                [trail]="trail.trailer"
+                [enable]="trail.enable"
+              ></app-trail-disable-button>
 
               <!-- Enable button -->
-              <button
-                class="btn btn-success btn-disable btn-xs"
-                data-toggle="tooltip"
-                title="Enable"
-                (click)="_t.enableTrail(trail.trailer)"
-                *ngIf="!trail.enable"
-              >
-                <i class="glyphicon glyphicon-ok"></i>
-              </button>
+              <app-trail-enable-button
+                [trail]="trail.trailer"
+                [enable]="trail.enable"
+              ></app-trail-enable-button>
 
               <!-- Unfollow button -->
-              <button
-                class="btn btn-danger btn-unfollow btn-xs"
-                data-toggle="tooltip"
-                title="Unfollow"
-                (click)="_t.unfollow(trail.trailer)"
-              >
-                <i class="glyphicon glyphicon-remove"></i>
-              </button>
+              <app-trail-unfollow-button
+                [trail]="trail.trailer"
+              ></app-trail-unfollow-button>
             </td>
           </tr>
         </tbody>

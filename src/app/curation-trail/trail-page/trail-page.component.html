@@ -1,0 +1,123 @@
+<!-- <div class="container">
+  <app-announcement></app-announcement>
+  <app-stats></app-stats>
+  <app-promoted-post></app-promoted-post>
+</div> -->
+
+<!-- Error panel -->
+<div class="container" *ngIf="invalidName || RPCError">
+  <div class="col col-sm-12">
+    <div class="panel panel-danger">
+      <div class="panel-heading"><h3 class="panel-heading">Error</h3></div>
+      <div class="panel-body">
+        <span *ngIf="invalidName"> The trail name is not valid. </span>
+        <span *ngIf="RPCError">
+          The connection to the RPC API is not established.
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="!invalidName && !RPCError">
+  <!-- profile details -->
+  <div class="col col-sm-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading"><h3 class="panel-title">User details</h3></div>
+      <div class="panel-body" style="text-align: center;">
+        <img class="avatar-img" [src]="trailAvatar()" /> <br />
+        <b>{{ trailName() }}</b> <br />
+        @{{ trailUsername() }}
+      </div>
+
+      <!-- Account balance and steem power -->
+      <table class="table table-striped">
+        <tr>
+          <td>STEEM balance:</td>
+          <td>{{ trailBalance().steem | number }} STEEM</td>
+        </tr>
+        <tr>
+          <td>SBD balance:</td>
+          <td>{{ trailBalance().sbd | number }} SBD</td>
+        </tr>
+        <tr>
+          <td>Steem Power:</td>
+          <td>{{ trailSP().actual_sp | number }} STEEM</td>
+        </tr>
+        <tr>
+          <td>Delegations:</td>
+          <td>
+            {{
+              Number(trailSP().received_sp) - Number(trailSP().delegated_sp)
+                | number
+            }}
+            STEEM
+          </td>
+        </tr>
+        <tr>
+          <td>Total SP:</td>
+          <td>{{ trailSP().total_sp | number }} STEEM</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Landing page -->
+  <div class="col col-sm-8">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Curation trail</h3>
+      </div>
+
+      <!-- for VIP users -->
+      <div
+        class="panel-body"
+        *ngIf="trailInf && trailInf[0] && trailInf[0].vip"
+        [innerHTML]="trailLandingText()"
+      ></div>
+
+      <!-- for all users -->
+      <table class="table table-striped">
+        <tr>
+          <td>Description:</td>
+          <td>{{ trailDescription() }}</td>
+        </tr>
+        <tr>
+          <td>Followers:</td>
+          <td>{{ trailFollowers() }}</td>
+        </tr>
+        <tr>
+          <td>7 days curation reward:</td>
+          <!-- Display loading while calculating curation rewards -->
+          <td *ngIf="!trailCurationReward()">
+            <img
+              src="/assets/img/loading-circle.gif"
+              alt="loading"
+              style="width: 19px;"
+            />
+          </td>
+          <td *ngIf="trailCurationReward()">
+            {{ trailCurationReward() }} STEEM
+          </td>
+        </tr>
+        <tr>
+          <td>Website:</td>
+          <td>{{ trailWebsite() }}</td>
+        </tr>
+        <tr>
+          <td>Action:</td>
+          <td *ngIf="!auth.isAuth">
+            <button onclick="$('#loginmodal').modal('show');" class="btn btn-default">
+              <i class="glyphicon glyphicon-log-in"></i>
+              Login to follow
+            </button>
+          </td>
+          <td *ngIf="auth.isAuth">
+            <app-trail-follow-button [trail]="trailUsername()" [text]="'Follow'"></app-trail-follow-button>
+            <app-trail-unfollow-button [trail]="trailUsername()" [text]="'Unfollow'"></app-trail-unfollow-button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

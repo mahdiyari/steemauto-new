@@ -4,7 +4,7 @@
  */
 import { Injectable } from '@angular/core'
 import { Initialize as sc2 } from 'sc2-sdk'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router, ActivatedRoute, Event, NavigationEnd } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import * as config from '../app.config'
 import { setCookie, getCookie } from '../utils/cookies'
@@ -22,10 +22,7 @@ export class AuthService {
   public access_token
   public userDetails
   public postingAuthorized
-  public httpOptions = {
-    withCredentials: true,
-    headers: { access_key: localStorage.getItem('access_key') || '' }
-  }
+  public scState
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -35,10 +32,23 @@ export class AuthService {
     this.initialize()
     this.consoleWarning()
     this.checkLogin()
+
+    this._router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this.scState = event.url
+      }
+    })
   }
+  public httpOptions() {
+    return {
+      withCredentials: true,
+      headers: { access_key: localStorage.getItem('access_key') || '' }
+    }
+  }
+
   // Redirect to steemconnect
   public login() {
-    window.location.href = this.api.getLoginURL()
+    window.location.href = this.api.getLoginURL(this.scState)
   }
   public logout() {
     setCookie('username', '', 0)
@@ -66,7 +76,7 @@ export class AuthService {
       if (params.username && params.access_token && params.expires_in) {
         this.access_token = params.access_token
         this.getLogin()
-        this._router.navigate(['/'])
+        this._router.navigate([params.state ? params.state : '/'])
       }
     })
   }
@@ -81,7 +91,7 @@ export class AuthService {
             username: this.access_token ? null : getCookie('username'),
             access_token: this.access_token
           },
-          this.httpOptions
+          this.httpOptions()
         )
         .toPromise()
         .then((res: any) => {
@@ -109,19 +119,20 @@ export class AuthService {
     }
     nodeCall(config.rpc.https, 'condenser_api.get_accounts', [
       [getCookie('username')]
-    ]).then(result => {
-      if (result && result[0]) {
-        result = result[0]
-      } else {
-        notifyResult({
-          id: 0,
-          error: `connection failed to the steem RPC node`
-        })
-      }
-      this.userDetails = result
-      console.log(result)
-      this.checkPostingAuth()
-    }).catch(e => console.error(e))
+    ])
+      .then(result => {
+        if (result && result[0]) {
+          result = result[0]
+        } else {
+          notifyResult({
+            id: 0,
+            error: `connection failed to the steem RPC node`
+          })
+        }
+        this.userDetails = result
+        this.checkPostingAuth()
+      })
+      .catch(e => console.error(e))
   }
 
   public checkPostingAuth() {
@@ -139,7 +150,7 @@ export class AuthService {
   public async postCall(api, body) {
     try {
       const res = await this._http
-        .post(api, body, this.httpOptions)
+        .post(api, body, this.httpOptions())
         .toPromise()
       if (res) {
         return res
