@@ -2,8 +2,9 @@ declare var $: any
 /**
  * jquery $.notify function
  * @param res received from API - {id, result?, error?}
+ * @param delay time to close the notification
  */
-export function notifyResult(res) {
+export function notifyResult(res: object, delay: number = 4000) {
   $.notify(
     {
       icon: 'glyphicon glyphicon-' + (res['id'] ? 'ok' : 'remove'),
@@ -11,7 +12,8 @@ export function notifyResult(res) {
     },
     {
       type: res['id'] ? 'success' : 'danger',
-      timer: 3000
+      delay,
+      timer: 1000,
     }
   )
 }
