@@ -24,3 +24,15 @@ img {
   margin-left: 3px;
   margin-right: 3px;
 }
+.danger {
+  color: #d9534f;
+}
+.success {
+  color: #3e8f3e;
+}
+
+.blocked {
+  pointer-events: none;
+  opacity: 0.4;
+  cursor: not-allowed;
+}

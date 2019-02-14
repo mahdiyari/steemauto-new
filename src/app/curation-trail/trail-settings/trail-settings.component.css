@@ -1,0 +1,13 @@
+.tag {
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 1px 4px;
+  margin: 2px 4px 0px 0px;
+  background: #ffffff;
+  max-width: fit-content;
+  float: left;
+}
+.tag-container {
+  max-width: 350px;
+  width: auto !important;
+}

@@ -17,9 +17,10 @@ export class SteemService {
   public acHisThreshold = {}
   public acHis = {}
   constructor(private _http: HttpClient) {}
-  public call(method, params) {
+  public call(method, params, bypass?) {
+    const byp = bypass ? '?bypass' : ''
     return this._http
-      .post(config.rpc.https, {
+      .post(config.rpc.https + byp, {
         jsonrpc: '2.0',
         method: method,
         params: params,
@@ -241,7 +242,7 @@ export class SteemService {
             account: user,
             start: -1,
             limit: 10000
-          }).then((res: any) => {
+          }, 1).then((res: any) => {
             // store data in object for chaching purpose
             this.acHis[user] = res
             resolve(res)
