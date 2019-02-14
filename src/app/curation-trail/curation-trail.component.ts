@@ -64,7 +64,7 @@ export class CurationTrailComponent implements OnInit {
    * @param this.followingTrails received result
    */
   public getFollowing() {
-    this.auth.postCall(config.api.following_trails, {
+    this.auth.postCall(config.api.all_following_trails, {
       user: this.auth.username
     }).then(res => {
       if (res['id'] === 1) {
