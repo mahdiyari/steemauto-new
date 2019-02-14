@@ -30,6 +30,8 @@ import { UnfollowButtonComponent } from './curation-trail/buttons/unfollow-butto
 import { ViewButtonComponent } from './curation-trail/buttons/view-button/view-button.component'
 import { DisableButtonComponent } from './curation-trail/buttons/disable-button/disable-button.component'
 import { EnableButtonComponent } from './curation-trail/buttons/enable-button/enable-button.component'
+import { TrailSettingsComponent } from './curation-trail/trail-settings/trail-settings.component'
+import { NgHttpLoaderModule } from 'ng-http-loader'
 
 @NgModule({
   declarations: [
@@ -59,9 +61,10 @@ import { EnableButtonComponent } from './curation-trail/buttons/enable-button/en
     UnfollowButtonComponent,
     ViewButtonComponent,
     DisableButtonComponent,
-    EnableButtonComponent
+    EnableButtonComponent,
+    TrailSettingsComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgHttpLoaderModule.forRoot()],
   providers: [],
   bootstrap: [AppComponent]
 })
