@@ -88,7 +88,7 @@
         </tr>
         <tr>
           <td>7 days curation reward:</td>
-          <!-- Display loading while calculating curation rewards -->
+          <!-- Display loading gif while calculating curation rewards -->
           <td *ngIf="!trailCurationReward()">
             <img
               src="/assets/img/loading-circle.gif"
@@ -96,6 +96,7 @@
               style="width: 19px;"
             />
           </td>
+          <!-- calculating curation reward could take a while -->
           <td *ngIf="trailCurationReward()">
             {{ trailCurationReward() }} STEEM
           </td>
@@ -106,15 +107,29 @@
         </tr>
         <tr>
           <td>Action:</td>
+          <!-- Display login button -->
           <td *ngIf="!auth.isAuth">
-            <button onclick="$('#loginmodal').modal('show');" class="btn btn-default">
-              <i class="glyphicon glyphicon-log-in"></i>
-              Login to follow
+            <button
+              onclick="$('#loginmodal').modal('show');"
+              class="btn btn-default"
+            >
+              <i class="glyphicon glyphicon-log-in"></i> Login to follow
             </button>
           </td>
+          <!-- Follow/Unfollow button for authorized users -->
           <td *ngIf="auth.isAuth">
-            <app-trail-follow-button [trail]="trailUsername()" [text]="'Follow'"></app-trail-follow-button>
-            <app-trail-unfollow-button [trail]="trailUsername()" [text]="'Unfollow'"></app-trail-unfollow-button>
+            <app-trail-follow-button
+              [trail]="trailUsername()"
+              [text]="'Follow'"
+            ></app-trail-follow-button>
+            <app-trail-unfollow-button
+              [trail]="trailUsername()"
+              [text]="'Unfollow'"
+            ></app-trail-unfollow-button>
+            <!-- Settings -->
+            <button [routerLink]="['settings']" class="btn btn-primary btn-xs">
+              Settings
+            </button>
           </td>
         </tr>
       </table>
