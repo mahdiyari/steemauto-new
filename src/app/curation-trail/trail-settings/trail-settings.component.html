@@ -1,0 +1,276 @@
+<div class="container">
+  <div class="col col-sm-1"></div>
+  <div class="col col-sm-10">
+    <!-- Back to the trail page -->
+    <a [routerLink]="['../']">
+      <i class="glyphicon glyphicon-arrow-left"></i> Back
+    </a>
+    <div class="panel panel-primary">
+      <div class="panel-heading"><h3 class="panel-title">Settings</h3></div>
+      <table class="table table-striped">
+        <!-- Enable/Disable curation trail -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-off"></i>
+            Enable:
+          </td>
+          <td>
+            <ng-container
+              *ngTemplateOutlet="
+                toggleInput;
+                context: { id: 'enable-checkbox' }
+              "
+            ></ng-container>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- Weight slider -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-signal"></i>
+            Weight:
+          </td>
+          <td style="min-width: 300px;">
+            <!-- Select voting method-->
+            <label class="radio-inline">
+              <input type="radio" name="votingmethod" id="vm_1" value="1" />
+              <i class="glyphicon glyphicon-scale"></i>
+              Scale
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="votingmethod" id="vm_2" value="2" />
+              <i class="glyphicon glyphicon-record"></i>
+              Fixed
+            </label>
+            <br /><br />
+
+            <!-- Rangeslider -->
+            <span style="float: left;">{{ weight }}%</span>
+            <input id="weight" type="range" min="1" max="100" step="1" />
+          </td>
+          <td>
+            <button
+              class="btn btn-primary btn-xs"
+              (click)="submitWeight()"
+              id="update-weight-btn"
+              disabled
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+
+        <!-- Delay time slider -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-time"></i>
+            Wait time:
+          </td>
+          <td>
+            <span style="float: left;">{{ delay }}min</span>
+            <input
+              id="delay"
+              type="range"
+              min="0"
+              max="30"
+              step="1"
+              value="12"
+            />
+          </td>
+          <td>
+            <button
+              class="btn btn-primary btn-xs"
+              (click)="submitDelay()"
+              id="update-delay-btn"
+              disabled
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+
+        <!-- Self voting -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-thumbs-up"></i>
+            Receive upvotes:
+          </td>
+          <td>
+            <ng-container
+              *ngTemplateOutlet="toggleInput; context: { id: 'selfvote' }"
+            ></ng-container>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- Comment upvoting -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-comment"></i>
+            Comment vote:
+          </td>
+          <td>
+            <ng-container
+              *ngTemplateOutlet="toggleInput; context: { id: 'commentvote' }"
+            ></ng-container>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- Inlcuding/Excluding tags -->
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-tags"></i>
+            Tags:
+          </td>
+          <td>
+            <!-- Select tags method -->
+            <label class="radio-inline">
+              <input type="radio" name="tagmethod" id="tm_0" value="0" />
+              Off
+            </label>
+            <label class="radio-inline success">
+              <input type="radio" name="tagmethod" id="tm_1" value="1" />
+              Include
+            </label>
+            <label class="radio-inline danger">
+              <input type="radio" name="tagmethod" id="tm_2" value="2" />
+              Exclude
+            </label>
+            <div [class.blocked]="!tagMethod">
+              <!-- Add tags to the list -->
+              <ng-container
+                *ngTemplateOutlet="additem;
+                  context: {var: tag, name:'tagInput', place: 'Tag', err: tagError, fns: {add: addTag.bind(this), change: changeTag.bind(this)}}
+                "
+              ></ng-container>
+
+              <!-- List of tags -->
+              <ng-container
+                *ngTemplateOutlet="
+                  itemlist;
+                  context: { array: tags, arrName: 'tags' }
+                "
+              ></ng-container>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-primary btn-xs">Update</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <i class="glyphicon glyphicon-user"></i>
+            Authors:
+          </td>
+          <td>
+            <!-- Select authors method -->
+            <label class="radio-inline">
+              <input type="radio" name="authormethod" id="am_0" value="0" />
+              Off
+            </label>
+            <label class="radio-inline success">
+              <input type="radio" name="authormethod" id="am_1" value="1" />
+              Include
+            </label>
+            <label class="radio-inline danger">
+              <input type="radio" name="authormethod" id="am_2" value="2" />
+              Exclude
+            </label>
+
+            <div [class.blocked]="!authorMethod">
+              <!-- Add authors to the list -->
+              <ng-container
+                *ngTemplateOutlet="additem;
+                  context: {var: author, name: 'authorInput', place: 'Author', err: authorError, fns: {add: addAuthor.bind(this), change: changeAuthor.bind(this)}}
+                "
+              ></ng-container>
+
+              <!-- List of authors -->
+              <ng-container
+                *ngTemplateOutlet="
+                  itemlist;
+                  context: { array: authors, arrName: 'authors' }
+                "
+              ></ng-container>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-primary btn-xs">Update</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="col col-sm-1"></div>
+</div>
+
+<!-- Template for Enable/Disable toggles -->
+<ng-template #toggleInput let-inputId="id">
+  <input
+    id="{{ inputId }}"
+    type="checkbox"
+    data-toggle="toggle"
+    data-on="Enabled"
+    data-off="Disabled"
+    data-onstyle="success"
+    data-offstyle="danger"
+    data-size="mini"
+  />
+</ng-template>
+
+<!-- Template for adding items to array -->
+<ng-template
+  #additem
+  let-fns="fns"
+  let-inputVar="var"
+  let-inputName="name"
+  let-place="place"
+  let-errVar="err"
+>
+  <div class="input-group" style="max-width: 300px; margin: 7px 0px;">
+    <input
+      [id]="inputName"
+      type="text"
+      class="form-control input-sm"
+      [placeholder]="place"
+      (input)="fns.change($event.target.value)"
+    />
+    <span class="input-group-btn">
+      <button
+        class="btn btn-default btn-sm"
+        type="button"
+        (click)="fns.add()"
+        [attr.disabled]="!inputVar ? true : null"
+      >
+        <i class="glyphicon glyphicon-plus"></i>
+        Add
+      </button>
+    </span>
+  </div>
+  <!-- Display possible errors -->
+  <p class="danger">{{ errVar }}</p>
+</ng-template>
+
+<!-- Template for displaying and removing list of items of array -->
+<ng-template #itemlist let-array="array" let-arrName="arrName">
+  <div class="tag-container">
+    <div
+      class="tag"
+      *ngFor="let t of array; let i = index"
+      [attr.data-index]="i"
+    >
+      {{ t }}
+
+      <!-- Icon for removing items -->
+      <i
+        title="Remove"
+        class="glyphicon glyphicon-remove pointer danger"
+        (click)="removeItem(arrName, i)"
+        style="font-size: 12px;"
+      ></i>
+    </div>
+  </div>
+</ng-template>
